@@ -1,3 +1,5 @@
+# https://github.com/zorino/docker-es-kibi
+
 # Linux OS
 FROM elasticsearch:2.2.0
 
