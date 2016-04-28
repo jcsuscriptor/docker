@@ -1,28 +1,25 @@
 # https://github.com/zorino/docker-es-kibi
 
 # Linux OS
-FROM elasticsearch:2.2.0
+FROM elasticsearch:2.1.2
 
 # Maintainer
 MAINTAINER zorino <maximilien1er@gmail.com>
 
-# Update
-# RUN yum -y update && yum clean all
-
-# Create volume for graph data
+# Install dependencies and kibi
 RUN apt-get update && apt-get clean \
  && curl -sL https://deb.nodesource.com/setup_4.x | bash - \
  && apt-get install -y nodejs \
- && cd /opt && wget http://bit.do/kibi-0-3-2-demo-lite-linux-x64-zip \
- && unzip kibi-0-3-2-demo-lite-linux-x64-zip \
- && ln -s kibi-0-3-2-demo-lite-linux-x64-zip kibi \
+ && cd /opt && wget http://bit.do/kibi-0-3-0-linux-x64-zip \
+ && unzip kibi-0-3-0-linux-x64-zip \
+ && ln -s kibi-0.3.0-linux-x64 kibi \
  && /usr/share/elasticsearch/bin/plugin install solutions.siren/siren-join/2.1.2
 
-COPY entrypoint.sh /opt/
+# Entrypoint
+COPY entrypoint.sh /opt/entrypoint.sh
 RUN chmod 755 /opt/entrypoint.sh
- 
-# Exec on start
-ENTRYPOINT ["/bin/bash", "/opt/entrypoint.sh"]
+ENTRYPOINT ["/opt/entrypoint.sh"]
+# ENTRYPOINT ["tail", "-f", "/dev/null"]
 
 # Expose Default Port
 EXPOSE 9200 9300 5601
